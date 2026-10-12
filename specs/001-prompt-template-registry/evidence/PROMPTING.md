@@ -89,3 +89,34 @@ has a row and the plan is skimmable.
 
 **Chain integrity check:** every FR-001..FR-010 has a component and a planned test in the
 TRACEABILITY map before any code is written.
+
+
+---
+
+## Stage 3 — `/tasks` (task breakdown)
+
+**Technique: chaining.** Input is [`plan.md`](../plan.md). Each task cites the FRs it covers and the
+component the plan assigned, so the task list is a mechanical projection of the plan — a new design
+decision in tasks would be a chain break.
+
+**Technique: structured output.** Fixed per-task schema — *Test first* → *Implement* → *Done when* —
+so each task is independently verifiable and strictly TDD (the test precedes the code).
+
+**Technique: caching-aware prompting.** Same stable prefix; only the plan + "emit TDD tasks"
+instruction varied at the tail.
+
+**Prompt used (verbatim intent):**
+
+> Chain from `plan.md`. Emit `tasks.md` as an ordered, TDD-granular list: pure `VariableParser` →
+> pure `TemplateRenderer` → entity+repository → service → DTOs+controller → exception handler →
+> end-to-end. For each task give the test to write first, the files to implement, the FRs covered,
+> and a `mvn -q -B test` done-when. Order by dependency; mark which tasks are independent.
+
+**Output:** [`../tasks.md`](../tasks.md) — T1 parser, T2 renderer (both pure/independent), T3
+entity+repo (`@DataJpaTest`), T4 service (Mockito), T5 DTOs+controller (`@WebMvcTest`), T6 exception
+handler + `ApiError`, T7 end-to-end + curl capture. Definition-of-done requires full-suite green and
+every FR exercised.
+
+**Chain integrity check:** every FR-001..FR-010 appears in at least one task's coverage list and
+every task's first test maps back to a spec acceptance scenario — closing the
+spec → plan → tasks chain before any production code is written.

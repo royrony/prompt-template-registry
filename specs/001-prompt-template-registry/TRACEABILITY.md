@@ -26,7 +26,7 @@ an immutable new version. Structured JSON throughout. No LLM, no network, no ext
 | --- | --- | --- |
 | Spec | [`spec.md`](./spec.md) | done |
 | Plan | [`plan.md`](./plan.md) | done |
-| Tasks | [`tasks.md`](./tasks.md) | pending |
+| Tasks | [`tasks.md`](./tasks.md) | done |
 | Prompt-engineering log | [`evidence/PROMPTING.md`](./evidence/PROMPTING.md) | in progress |
 | Self-review log | [`evidence/SELF-REVIEW.md`](./evidence/SELF-REVIEW.md) | pending |
 | PR | (link once raised) | pending |
