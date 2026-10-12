@@ -52,3 +52,40 @@ and input bounds.
 
 **Why structured output here:** the Given/When/Then acceptance scenarios make the spec → test
 mapping mechanical — each becomes a named unit or web-slice test in Tasks 5–9.
+
+
+---
+
+## Stage 2 — `/plan` (technical plan)
+
+**Technique: chaining.** Input is exactly Stage 1's output ([`spec.md`](../spec.md)). Every FR is
+carried forward and assigned a concrete Spring Boot component plus a planned test; no component is
+introduced that doesn't trace to an FR.
+
+**Technique: caching-aware prompting.** Same stable prefix (README + Speckit schema + fixed feature
+decisions) kept byte-identical; only the "map FRs onto components" instruction and the confirmed
+stack facts (Spring Boot 3.3.4, package `dev.ssec2.ptr`, H2) vary at the tail.
+
+**Technique: structured output.** Requested as fixed sections — Approach, Package layout,
+Component→FR table, Data model, Key design decisions, Testing strategy, Out of scope — so each FR
+has a row and the plan is skimmable.
+
+**Prompt used (verbatim intent):**
+
+> Chain from `spec.md`. Produce `plan.md` mapping every FR onto concrete `dev.ssec2.ptr` components:
+> a `PromptTemplate` JPA entity (insert-only versioning), a repository, two **pure** domain helpers
+> `VariableParser` and `TemplateRenderer` (no Spring, so the core logic is unit-tested directly), a
+> service, REST DTOs, a controller under `/api/templates`, and a `@ControllerAdvice` emitting one
+> `ApiError` shape. Decide how substitution avoids re-expansion, how versioning stays immutable, and
+> whether `declaredVariables` is stored or derived — justify each. Emit an FR→component→test table.
+
+**Output:** [`../plan.md`](../plan.md). Key decisions recorded there:
+- `declaredVariables` is **derived** from `body` on read, never stored — no drift (FR-002).
+- **Insert-only** versioning: `nextVersion = max(version)+1`; no update path exists (FR-004, SC-003).
+- Single-pass substitution via `Matcher.appendReplacement` + `quoteReplacement` so values are
+  inserted literally and never re-scanned (FR-005).
+- One `ApiError` built in exactly one place per branch in `ApiExceptionHandler` (FR-009, SC-004).
+- Pure `VariableParser` / `TemplateRenderer` isolate the behavioral core for framework-free tests.
+
+**Chain integrity check:** every FR-001..FR-010 has a component and a planned test in the
+TRACEABILITY map before any code is written.

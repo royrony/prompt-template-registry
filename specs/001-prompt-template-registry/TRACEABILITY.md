@@ -25,7 +25,7 @@ an immutable new version. Structured JSON throughout. No LLM, no network, no ext
 | Stage | Artifact | Status |
 | --- | --- | --- |
 | Spec | [`spec.md`](./spec.md) | done |
-| Plan | [`plan.md`](./plan.md) | pending |
+| Plan | [`plan.md`](./plan.md) | done |
 | Tasks | [`tasks.md`](./tasks.md) | pending |
 | Prompt-engineering log | [`evidence/PROMPTING.md`](./evidence/PROMPTING.md) | in progress |
 | Self-review log | [`evidence/SELF-REVIEW.md`](./evidence/SELF-REVIEW.md) | pending |
@@ -37,13 +37,13 @@ Populated in the plan (Task 3) and checked off as code/tests land.
 
 | FR | Description | Component | Test | Status |
 | --- | --- | --- | --- | --- |
-| FR-001 | Register template → 201 + version + declaredVariables | _TBD plan_ | | pending |
-| FR-002 | Parse `{{var}}` → declaredVariables | _TBD plan_ | | pending |
-| FR-003 | Reject malformed placeholder (400) | _TBD plan_ | | pending |
-| FR-004 | Re-register → new immutable version | _TBD plan_ | | pending |
-| FR-005 | Render latest, single literal pass | _TBD plan_ | | pending |
-| FR-006 | Missing/unknown vars → 400 listing both | _TBD plan_ | | pending |
-| FR-007 | Unknown name → 404 standard body | _TBD plan_ | | pending |
-| FR-008 | List all / get latest / list versions | _TBD plan_ | | pending |
-| FR-009 | Structured JSON; one error shape | _TBD plan_ | | pending |
-| FR-010 | Input bounds enforced (400) | _TBD plan_ | | pending |
+| FR-001 | Register template → 201 + version + declaredVariables | `PromptTemplateController.create` + `PromptTemplateService.register` + `TemplateResponse` | `PromptTemplateControllerTest` create-201; service test | pending |
+| FR-002 | Parse `{{var}}` → declaredVariables | `VariableParser.parse` | `VariableParserTest` | pending |
+| FR-003 | Reject malformed placeholder (400) | `VariableParser` → `MalformedTemplateException` + `ApiExceptionHandler` | `VariableParserTest` malformed; controller 400 | pending |
+| FR-004 | Re-register → new immutable version | `PromptTemplateService.register` + `PromptTemplateRepository` | `PromptTemplateServiceTest` version-increment/immutable | pending |
+| FR-005 | Render latest, single literal pass | `TemplateRenderer.render` | `TemplateRendererTest` substitution/repeat/no-reexpand | pending |
+| FR-006 | Missing/unknown vars → 400 listing both | `TemplateRenderer` → `VariableValidationException` | `TemplateRendererTest` missing+unknown | pending |
+| FR-007 | Unknown name → 404 standard body | `PromptTemplateService` → `TemplateNotFoundException` + handler | service not-found; controller 404 | pending |
+| FR-008 | List all / get latest / list versions | `PromptTemplateController` + service + repo finders | controller get/list/versions | pending |
+| FR-009 | Structured JSON; one error shape | DTOs + `ApiError` + `ApiExceptionHandler` | error-shape test across 404/400/400 | pending |
+| FR-010 | Input bounds enforced (400) | `CreateTemplateRequest` bean validation + handler | controller validation-400 | pending |
