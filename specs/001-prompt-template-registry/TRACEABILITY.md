@@ -28,9 +28,9 @@ an immutable new version. Structured JSON throughout. No LLM, no network, no ext
 | Plan | [`plan.md`](./plan.md) | done |
 | Tasks | [`tasks.md`](./tasks.md) | done |
 | Prompt-engineering log | [`evidence/PROMPTING.md`](./evidence/PROMPTING.md) | done |
-| Self-review log | [`evidence/SELF-REVIEW.md`](./evidence/SELF-REVIEW.md) | pending |
+| Self-review log | [`evidence/SELF-REVIEW.md`](./evidence/SELF-REVIEW.md) | done |
 | Demo transcript | [`evidence/CURL-DEMO.md`](./evidence/CURL-DEMO.md) | done |
-| PR | (link once raised) | pending |
+| PR instructions | [`PR.md`](./PR.md) + [`PR-BODY.md`](./PR-BODY.md) | ready (push on your action) |
 
 ## Acceptance-criteria → implementation map
 
