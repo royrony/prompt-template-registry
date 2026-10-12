@@ -27,8 +27,9 @@ an immutable new version. Structured JSON throughout. No LLM, no network, no ext
 | Spec | [`spec.md`](./spec.md) | done |
 | Plan | [`plan.md`](./plan.md) | done |
 | Tasks | [`tasks.md`](./tasks.md) | done |
-| Prompt-engineering log | [`evidence/PROMPTING.md`](./evidence/PROMPTING.md) | in progress |
+| Prompt-engineering log | [`evidence/PROMPTING.md`](./evidence/PROMPTING.md) | done |
 | Self-review log | [`evidence/SELF-REVIEW.md`](./evidence/SELF-REVIEW.md) | pending |
+| Demo transcript | [`evidence/CURL-DEMO.md`](./evidence/CURL-DEMO.md) | done |
 | PR | (link once raised) | pending |
 
 ## Acceptance-criteria → implementation map
@@ -37,13 +38,15 @@ Populated in the plan (Task 3) and checked off as code/tests land.
 
 | FR | Description | Component | Test | Status |
 | --- | --- | --- | --- | --- |
-| FR-001 | Register template → 201 + version + declaredVariables | `PromptTemplateController.create` + `PromptTemplateService.register` + `TemplateResponse` | `PromptTemplateControllerTest` create-201; service test | pending |
-| FR-002 | Parse `{{var}}` → declaredVariables | `VariableParser.parse` | `VariableParserTest` | pending |
-| FR-003 | Reject malformed placeholder (400) | `VariableParser` → `MalformedTemplateException` + `ApiExceptionHandler` | `VariableParserTest` malformed; controller 400 | pending |
-| FR-004 | Re-register → new immutable version | `PromptTemplateService.register` + `PromptTemplateRepository` | `PromptTemplateServiceTest` version-increment/immutable | pending |
-| FR-005 | Render latest, single literal pass | `TemplateRenderer.render` | `TemplateRendererTest` substitution/repeat/no-reexpand | pending |
-| FR-006 | Missing/unknown vars → 400 listing both | `TemplateRenderer` → `VariableValidationException` | `TemplateRendererTest` missing+unknown | pending |
-| FR-007 | Unknown name → 404 standard body | `PromptTemplateService` → `TemplateNotFoundException` + handler | service not-found; controller 404 | pending |
-| FR-008 | List all / get latest / list versions | `PromptTemplateController` + service + repo finders | controller get/list/versions | pending |
+| FR-001 | Register template → 201 + version + declaredVariables | `PromptTemplateController.create` + `PromptTemplateService.register` + `TemplateResponse` | `PromptTemplateServiceTest` (done); `PromptTemplateControllerTest` create-201 (done) | done |
+| FR-002 | Parse `{{var}}` → declaredVariables | `VariableParser.parse` | `VariableParserTest` (done) | done |
+| FR-003 | Reject malformed placeholder (400) | `VariableParser` → `MalformedTemplateException` + `ApiExceptionHandler` | `VariableParserTest` (done); `PromptTemplateServiceTest` (done); `ApiExceptionHandlerTest` (done) | done |
+| FR-004 | Re-register → new immutable version | `PromptTemplateService.register` + `PromptTemplateRepository` | `PromptTemplateServiceTest` (done); `PromptTemplateRepositoryTest` (done) | done |
+| FR-005 | Render latest, single literal pass | `TemplateRenderer.render` + `PromptTemplateService.render` | `TemplateRendererTest` (done); `PromptTemplateServiceTest` (done) | done |
+| FR-006 | Missing/unknown vars → 400 listing both | `TemplateRenderer` → `VariableValidationException` + `ApiExceptionHandler` | `TemplateRendererTest` (done); `PromptTemplateControllerTest` render-400 (done) | done |
+| FR-007 | Unknown name → 404 standard body | `PromptTemplateService` → `TemplateNotFoundException` + `ApiExceptionHandler` | `PromptTemplateServiceTest` (done); `PromptTemplateControllerTest` 404 (done) | done |
+| FR-008 | List all / get latest / list versions | `PromptTemplateController` + service + repo finders | `PromptTemplateRepositoryTest` (done); `PromptTemplateServiceTest` (done); `PromptTemplateControllerTest` (done) | done |
+| FR-009 | Structured JSON; one error shape | DTOs + `ApiError` + `ApiExceptionHandler` | `PromptTemplateControllerTest` 400/404 (done); `ApiExceptionHandlerTest` (done) | done |
+| FR-010 | Input bounds enforced (400) | `CreateTemplateRequest` bean validation + `ApiExceptionHandler` | `PromptTemplateControllerTest` blank/illegal-name 400 (done) | done |
 | FR-009 | Structured JSON; one error shape | DTOs + `ApiError` + `ApiExceptionHandler` | error-shape test across 404/400/400 | pending |
 | FR-010 | Input bounds enforced (400) | `CreateTemplateRequest` bean validation + handler | controller validation-400 | pending |

@@ -120,3 +120,30 @@ every FR exercised.
 **Chain integrity check:** every FR-001..FR-010 appears in at least one task's coverage list and
 every task's first test maps back to a spec acceptance scenario — closing the
 spec → plan → tasks chain before any production code is written.
+
+
+---
+
+## Stages 4–8 — implementation (TDD per task) + end-to-end
+
+Each task from [`../tasks.md`](../tasks.md) was implemented test-first, verified, then committed —
+the implementation half of the chain. Technique notes:
+
+- **Chaining (across tasks):** T1/T2 (pure parser + renderer) feed T4 (service), which feeds T5
+  (controller) and T6 (handler). Each layer consumes the one below unchanged; no layer re-defines
+  behavior the spec/plan did not assign to it.
+- **Structured output (in code):** every endpoint returns a typed DTO and every error returns the
+  single `ApiError` record — the "enforce structured output / JSON schema" course topic applied
+  literally to the API contract.
+- **The feature itself is the course topic:** a reusable prompt **template with variables** plus
+  strict **missing/unknown** validation is exactly "structured, reusable prompt engineering" made
+  executable.
+
+**Verification:** full suite `mvn -B clean test` → **Tests run: 50, Failures: 0, Errors: 0**.
+Live end-to-end run captured in [`CURL-DEMO.md`](./CURL-DEMO.md): all five endpoints plus the
+missing-var, unknown-var, unknown-name, malformed-template, and invalid-name error paths, each
+returning the one standard error shape.
+
+**Commits (one per task, spec-traceable):**
+`scaffold → spec → plan → tasks → entity+repo → parser+renderer → service → controller+dto+handler
+→ handler-test → e2e`.
